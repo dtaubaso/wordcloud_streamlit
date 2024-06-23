@@ -38,7 +38,7 @@ if uploaded_file is not None:
                            col_para_num, horizontal=True)
     
        # Preguntar al usuario cuántas palabras clave graficar
-    num_keywords = st.number_input("Cantidad de palabras clave a graficar", min_value=10, max_value=500, value=100)
+    num_keywords = st.number_input("Cantidad de palabras clave a graficar", min_value=10, max_value=300, value=50)
     
     ngrams = st.radio("Cantidad de ngrams a graficar", [1, 2], horizontal=True)
 
