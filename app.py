@@ -13,13 +13,15 @@ stopwords = requests.get("https://raw.githubusercontent.com/dtaubaso/aux/main/st
 # Función para generar el WordCloud
 def generate_wordcloud(data_dict):
     font = "lora.ttf"
-    wordcloud = WordCloud(font_path = font, width = 3500, height = 2000, background_color = "white",
-                        color_func= lambda *args, **kwargs: "black", max_words = 100, random_state = 5).generate_from_frequencies(data_dict)
+    wordcloud = WordCloud(font_path=font, width=3500, height=2000, background_color="white",
+                          color_func=lambda *args, **kwargs: "black", max_words=100, random_state=5).generate_from_frequencies(data_dict)
     
-    plt.imshow(wordcloud, interpolation='bilinear')
-    plt.axis("off")
-    plt.show()
-    st.pyplot()
+    fig, ax = plt.subplots(figsize=(30, 15))
+    ax.imshow(wordcloud, interpolation='bilinear')
+    ax.axis("off")
+    
+    # Mostrar la figura en Streamlit
+    st.pyplot(fig)
 
 def reemplazar_amp(url):
   pattern = r"\/amp\/|\/\?outputType=amp$"
@@ -76,14 +78,15 @@ def generar_frec_dict(df, col_text, col_num, ngrams, num_keywords):
     df = df.dropna()
     tokens = word_tokenize(df['text_clean'].tolist(), ngrams)
     df['tokens'] = tokens
-    if col_num is not "Ninguna":
+    if col_num != "Ninguna":
       df = df[['tokens', col_num]]
       df['len'] = df['tokens'].apply(lambda x: len(x))
       df[f'{col_num}_prom'] = df[col_num]/df['len']
       df = df.explode('tokens', ignore_index=True)
+      df = df.dropna()
       df = df.sort_values(f'{col_num}_prom', ascending=False)
       df = df.head(num_keywords)
-      df = df[f'{col_num}_prom'].astype('int')
+      df[f'{col_num}_prom'] = df[f'{col_num}_prom'].astype('int')
       return df.set_index('tokens')[f'{col_num}_prom'].to_dict()
     else:
       tokens = list(chain.from_iterable(tokens))
