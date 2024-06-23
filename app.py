@@ -3,6 +3,12 @@ from wordcloud import WordCloud
 import pandas as pd
 import matplotlib.pyplot as plt
 from utils import *
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,  # Nivel mínimo para registrar
+    format='%(asctime)s - %(levelname)s - %(message)s'  # Formato de los mensajes de log
+)
 
 # Función para generar el WordCloud
 def generate_wordcloud(data_dict):
@@ -56,7 +62,9 @@ if uploaded_file is not None:
                 with st.spinner('Generando WordCloud...'):
                     data_dict = generar_frec_dict(data, col_text, col_num, ngrams, num_keywords, stopw)
                     generate_wordcloud(data_dict)
-            except Exception:
+            except Exception as e:
                 st.error("Ocurrió un error, intente nuevamente")
+                logging.error(f"Ocurrió un error: {e}")
+                logging.exception("Detalle de la excepción:")
         else:
             st.error("Por favor complete todos los campos.")
