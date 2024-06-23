@@ -22,8 +22,7 @@ st.set_page_config(page_title="WordCloud con Ngrams desde CSV", page_icon=":peng
 
 # Configuración de la app Streamlit
 st.title('Generador de WordCloud con Ngrams desde CSV')
-st.write('Suba un archivo CSV para generar un WordCloud')
-
+#st.write('Suba un archivo CSV para generar un WordCloud'}
 # Cargador de archivos CSV
 uploaded_file = st.file_uploader("Suba un archivo CSV", type=["csv"])
 
@@ -54,9 +53,10 @@ if uploaded_file is not None:
 
         if len(data)>0 and col_text and col_num and ngrams and num_keywords:
             try:
-                data_dict = generar_frec_dict(data, col_text, col_num, ngrams, num_keywords, stopw)
-                generate_wordcloud(data_dict)
+                with st.spinner('Generando WordCloud...'):
+                    data_dict = generar_frec_dict(data, col_text, col_num, ngrams, num_keywords, stopw)
+                    generate_wordcloud(data_dict)
             except Exception:
-               st.error("Ocurrió un error, intente nuevamente")
+                st.error("Ocurrió un error, intente nuevamente")
         else:
             st.error("Por favor complete todos los campos.")
