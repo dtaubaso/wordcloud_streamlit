@@ -56,6 +56,7 @@ def generar_frec_dict(df, col_text, col_num, ngrams, num_keywords, stopw):
     if 'http' in df[col_text][0]:
        df['clean_text'] = df[col_text].apply(lambda x: reemplazar_amp(x))
        df['clean_text'] =  df['clean_text'].apply(lambda x: obtener_slug(x))
+       df.dropna(inplace=True)
        df['clean_text'] = df['clean_text'].apply(lambda x: clean_url(x))
        df[col_text] = df['clean_text']
     df['text_clean'] = df[col_text].apply(lambda x: normalizar(x))
