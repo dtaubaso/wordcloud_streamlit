@@ -73,6 +73,7 @@ def generar_frec_dict(df, col_text, col_num, ngrams, num_keywords, stopw):
       df = df.explode('tokens', ignore_index=True)
       df = df.dropna()
       df = df.sort_values(f'{col_num}_prom', ascending=False)
+      df = df.groupby('tokens').sum(numeric_only=True).reset_index()
       df = df.head(num_keywords)
       df[f'{col_num}_prom'] = df[f'{col_num}_prom'].astype('int')
       return df.set_index('tokens')[f'{col_num}_prom'].to_dict()
